@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>模板引擎</title>
+</head>
+<body>
+	<div id="app">
+
+	</div>
+	<script type="text/template" id="tpl">
+	 	<p class="test" id="test" style="display:block;">{{ message }} test</p>
+		<p m-text="html"></p>
+		<p m-html="html"></p>
+		<hr>
+		<div>
+			<ul>
+				<li m-for="(item,index) in items">{{ index + "---test"}} --- {{ item }}</li>
+				<li>{{ message | toUpper }} --- test</li>
+			</ul>
+		</div>
+		<hr>
+		<div m-for="item in items">{{ item }}</div>
+		<hr>
+		<div>
+			<ul>
+				<li m-for="(v,k) in items" m-bind:key="k">{{ v }} --- {{ message }}</li>
+				<li>{{ message }}</li>
+			</ul>
+		</div>
+		<hr>
+		<div>
+			<ul>
+				<li m-for="(v,k) in items" m-bind:key="k" m-html="v"></li>
+				<li>{{ message }}</li>
+			</ul>
+		</div>
+		<hr>
+		<div>
+			<ul>
+				<li m-for="(v,k) in list" :key="k">{{ v['title'] }} --- {{ v.desc }}</li>
+			</ul>
+		</div>
+		<hr>
+		<button @click="print">执行</button>
+		<hr>
+		<div m-if="true">m-if true 1 {{ message }}</div>
+		<div m-else>m-if false 1 {{ message }}</div>
+		<div m-if="isShow">m-if true 2 {{ message }}</div>
+		<div m-else>m-if false 2 {{ message }}</div>
+		<div m-show="isShow">m-show 显示 {{ message }}</div>
+		<div>json format{{ items | json}}</div>
+		<div>计算属性(computed) {{ getMessage + getContent }}</div>
+	</script>
+	<script type="text/javascript" src="./src/mce-tpl.min.js"></script>
+	<script type="text/javascript">
+			 var tpl  = window.mceTpl
+			   , node = tpl.render({
+			 	el: "#tpl",
+			   	id: "app",
+			 	className: "tpl test",
+			 	renderNode: "#app",
+			 	config: {
+			 		openTag: "{{",
+			 		closeTag: "}}"
+			 	},
+			 	// appendNode: "#app",
+			 	data: {
+			 		isShow: true,
+			 		message: "Hello",
+			 		html: "<span>test</span>",
+			 		items: [
+			 			1,
+			 			2,
+			 			3
+			 		],
+			 		list: [
+			 		   {
+			 		   		title: "神级天才",
+			 		   		desc: "神级天才"
+			 		   },
+			 		   {
+			 		   	   title: "龙王传说",
+			 		   	   desc: "龙王传说"
+			 		   }
+			 		]
+			 	},
+			 	methods: {
+			 		print: function () {
+			 			console.log(this.message);
+			 		}
+			 	},
+			 	filters: {
+			 		toUpper: function (value) {
+			 			return value.toUpperCase();
+			 		}
+			 	},
+			 	computed: {
+			 		getMessage: function () {
+			 			return this.message;
+			 		},
+			 		getContent: function () {
+			 			return " World!"
+			 		}
+			 	}
+			 });
+			console.log(node);
+	</script>
+</body>
+</html>
